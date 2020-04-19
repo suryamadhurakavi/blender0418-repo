@@ -1,0 +1,28 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- script: echo Hello, world!
+  displayName: 'Run a one-line script'
+
+  displayName: 'Run a multi-line script'
+- task: AzureResourceManagerTemplateDeployment@3
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: 'blender0418-conn'
+    subscriptionId: '2b1e852e-5e1c-4da4-adbb-910ced107130'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: 'blender0418-rg'
+    location: 'Central US'
+    templateLocation: 'Linked artifact'
+    csmFile: 'CreateWebApp/azuredeploy.json'
+    overrideParameters: '-projectName blender0418-repo -linkedTemplateUri https://raw.githubusercontent.com/suryamadhurakavi/blender0418-repo/master/CreateWebApp/linkedStorageAccount.json'
+    deploymentMode: 'Incremental'
